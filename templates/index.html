@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PriorityFlow | SaaS Binary Min-Heap Priority Queue Engine</title>
+    <!-- Modern Typography: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="app-sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                </svg>
+            </div>
+            <span class="brand-name">PriorityFlow</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <span class="nav-section-label">Core Dashboard</span>
+
+            <!-- 1. Overview -->
+            <button class="nav-item active" data-target="section-overview">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                Overview
+            </button>
+
+            <!-- 2. Create Task -->
+            <button class="nav-item" data-target="section-create-task">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="16"></line>
+                    <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+                Create Task
+            </button>
+
+            <!-- 3. Live Priority Queue -->
+            <button class="nav-item" data-target="section-live-queue">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="5" r="3"></circle>
+                    <circle cx="6" cy="19" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line x1="10" y1="7.5" x2="7.5" y2="16.5"></line>
+                    <line x1="14" y1="7.5" x2="16.5" y2="16.5"></line>
+                </svg>
+                Live Priority Queue
+                <span class="nav-item-badge" id="sidebar-queue-badge">0</span>
+            </button>
+
+            <span class="nav-section-label">Operations</span>
+
+            <!-- 4. Execution Simulator -->
+            <button class="nav-item" data-target="section-simulator">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Execution Simulator
+            </button>
+
+            <!-- 5. Task History -->
+            <button class="nav-item" data-target="section-history">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+                Task History
+            </button>
+
+            <!-- 6. Performance Analytics -->
+            <button class="nav-item" data-target="section-analytics">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                Performance Analytics
+            </button>
+
+            <span class="nav-section-label">System</span>
+
+            <!-- 7. About Project -->
+            <button class="nav-item" data-target="section-about">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                About Project
+            </button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="heap-health-card">
+                <span class="health-dot"></span>
+                <div>
+                    <div class="health-title">Binary Min-Heap Active</div>
+                    <div class="health-sub">Invariant Valid &bull; O(log n)</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN APP CONTENT WRAPPER -->
+    <div class="app-wrapper">
+        <!-- TOP APP HEADER -->
+        <header class="app-header">
+            <div class="header-left">
+                <h2 class="page-title" id="header-section-title">Overview Dashboard</h2>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary btn-sm" id="btn-header-quick-add" title="Quickly add a task to SQLite and Min-Heap">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Quick Add Task
+                </button>
+                <button class="btn btn-dispatch btn-sm" id="btn-header-execute-next" title="Extract and execute highest priority task">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    Execute Next Task
+                </button>
+            </div>
+        </header>
+
+        <!-- MAIN VIEW CONTAINER -->
+        <main class="app-main">
+
+            <!-- =========================================================
+                 SECTION 1: OVERVIEW (REAL DATA FROM SQLITE)
+                 ========================================================= -->
+            <section class="section-view active" id="section-overview">
+
+                <!-- OVERVIEW EMPTY STATE BANNER (Shown when total_tasks == 0) -->
+                <div id="overview-empty-state" class="card empty-state-card" style="display: none;">
+                    <div class="empty-state-content">
+                        <div class="empty-state-icon">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                        </div>
+                        <h3>Database is Currently Empty</h3>
+                        <p>No tasks exist in SQLite. You can quickly initialize realistic cloud enterprise tasks or create your own custom task to demonstrate Min-Heap priority queue operations.</p>
+                        <div class="empty-state-actions">
+                            <button class="btn btn-primary" id="btn-empty-seed-samples">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                Create Sample Tasks
+                            </button>
+                            <button class="btn btn-secondary" id="btn-empty-quick-add">
+                                Quick Add First Task
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OVERVIEW DATA CONTAINER -->
+                <div id="overview-content-wrapper">
+                    <!-- Top Action Bar -->
+                    <div class="overview-action-bar">
+                        <div class="action-bar-left">
+                            <h3 class="overview-section-heading">Executive Telemetry & Real-Time Queue Metrics</h3>
+                            <span class="overview-subtext">Directly aggregated from SQLite database and in-memory Binary Min-Heap</span>
+                        </div>
+                        <div class="action-bar-buttons">
+                            <button class="btn btn-primary btn-sm" id="btn-overview-quick-add">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                Quick Add Task
+                            </button>
+                            <button class="btn btn-dispatch btn-sm" id="btn-overview-execute-next">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                Execute Next Task
+                            </button>
+                            <button class="btn btn-secondary btn-sm" id="btn-overview-seed-samples" title="Re-populate demo tasks">
+                                Seed Samples
+                            </button>
+                            <button class="btn btn-outline btn-sm" id="btn-overview-clear-all" style="color: #dc2626; border-color: #fecaca;" title="Test empty state">
+                                Clear All
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 8 KEY REAL-TIME METRIC CARDS -->
+                    <div class="kpi-grid">
+                        <!-- 1. Total Tasks -->
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Total Tasks</span>
+                                <div class="kpi-icon-wrap">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                                </div>
+                            </div>
+                            <div class="kpi-value" id="stat-total-tasks">0</div>
+                            <span class="kpi-subtext">All database records</span>
+                        </div>
+
+                        <!-- 2. Pending Tasks -->
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Pending Tasks</span>
+                                <div class="kpi-icon-wrap" style="color: #64748b;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                </div>
+                            </div>
+                            <div class="kpi-value highlight-indigo" id="stat-pending-tasks">0</div>
+                            <span class="kpi-subtext">Awaiting execution</span>
+                        </div>
+
+                        <!-- 3. In-Progress Tasks -->
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">In-Progress Tasks</span>
+                                <div class="kpi-icon-wrap" style="color: #2563eb;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                                </div>
+                            </div>
+                            <div class="kpi-value" style="color: #2563eb;" id="stat-in-progress-tasks">0</div>
+                            <span class="kpi-subtext">Currently on worker nodes</span>
+                        </div>
+
+                        <!-- 4. Completed Tasks -->
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Completed Tasks</span>
+                                <div class="kpi-icon-wrap" style="color: #10b981;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                </div>
+                            </div>
+                            <div class="kpi-value" style="color: #10b981;" id="stat-completed-tasks">0</div>
+                            <span class="kpi-subtext">Successfully dispatched</span>
+                        </div>
+
+                        <!-- 5. Critical-Priority Tasks (P1) -->
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Critical-Priority (P1)</span>
+                                <div class="kpi-icon-wrap" style="color: #ef4444; background: #fef2f2;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                </div>
+                            </div>
+                            <div class="kpi-value" style="color: #ef4444;" id="stat-critical-tasks">0</div>
+                            <span class="kpi-subtext">High SLA urgency</span>
+                        </div>
+
+                        <!-- 6. Current Queue Size -->
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Current Queue Size</span>
+                                <div class="kpi-icon-wrap" style="color: #4f46e5; background: #e0e7ff;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                                </div>
+                            </div>
+                            <div class="kpi-value" style="color: #4f46e5;" id="stat-queue-size">0</div>
+                            <span class="kpi-subtext">Active in Binary Min-Heap</span>
+                        </div>
+
+                        <!-- 7. Total Insert Operations -->
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Total Inserts</span>
+                                <div class="kpi-icon-wrap">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+                                </div>
+                            </div>
+                            <div class="kpi-value" id="stat-total-inserts">0</div>
+                            <span class="kpi-subtext">Heap push operations logged</span>
+                        </div>
+
+                        <!-- 8. Total Extraction Operations -->
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Total Extractions</span>
+                                <div class="kpi-icon-wrap">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                                </div>
+                            </div>
+                            <div class="kpi-value" id="stat-total-extractions">0</div>
+                            <span class="kpi-subtext">Extract-min dispatches logged</span>
+                        </div>
+                    </div>
+
+                    <!-- NEXT TASK TO BE EXECUTED (SPOTLIGHT CARD) -->
+                    <div class="card spotlight-root-card">
+                        <div class="spotlight-header">
+                            <div>
+                                <span class="badge badge-p1" id="next-task-badge">NEXT TASK IN LINE &bull; P1</span>
+                                <span style="font-size: 0.78rem; color: var(--text-muted); font-family: var(--font-mono); margin-left: 8px;">Array Index [0] (Root)</span>
+                            </div>
+                            <button class="btn btn-dispatch btn-sm" id="btn-spotlight-execute-next">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                Execute Next Task
+                            </button>
+                        </div>
+                        <h3 class="spotlight-title" id="next-task-title">Checking queue status...</h3>
+                        <div class="spotlight-meta" id="next-task-meta">
+                            Category: Infrastructure &bull; Est. Duration: 10s &bull; Guaranteed highest SLA urgency
+                        </div>
+                        <div class="spotlight-details" id="next-task-notes" style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 6px;"></div>
+                    </div>
+
+                    <!-- TWO LIVE CHARTS: PRIORITY DISTRIBUTION & STATUS DISTRIBUTION -->
+                    <div class="analytics-grid" style="margin-bottom: 24px;">
+                        <!-- Chart 1: Priority Distribution -->
+                        <div class="card" style="margin-bottom: 0;">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <h3>Priority Distribution</h3>
+                                    <span class="card-caption">Live SQLite count across P1 to P5</span>
+                                </div>
+                            </div>
+                            <div class="chart-card-body" style="height: 240px;">
+                                <canvas id="overview-priority-chart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Chart 2: Task Status Distribution -->
+                        <div class="card" style="margin-bottom: 0;">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <h3>Task Status Distribution</h3>
+                                    <span class="card-caption">Live breakdown: Pending, In-Progress, Completed, Cancelled</span>
+                                </div>
+                            </div>
+                            <div class="chart-card-body" style="height: 240px;">
+                                <canvas id="overview-status-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RECENT EXECUTION EVENTS TIMELINE -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <h3>Recent Execution Events</h3>
+                                <span class="card-caption">Live audit trail of heap insertions, extractions, and completions</span>
+                            </div>
+                        </div>
+                        <div id="overview-events-container" style="display: flex; flex-direction: column; gap: 8px;">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+
+            <!-- =========================================================
+                 SECTION 2: CREATE TASK
+                 ========================================================= -->
+            <section class="section-view" id="section-create-task">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <h3>Task Ingestion Engine</h3>
+                            <span class="card-caption">Enqueue task into the Binary Min-Heap Priority Queue (O(log n) insertion)</span>
+                        </div>
+                    </div>
+
+                    <!-- Rapid Presets -->
+                    <div class="preset-container">
+                        <span class="form-label">Quick Enterprise Presets:</span>
+                        <div class="preset-pills">
+                            <button type="button" class="preset-btn" data-preset="failover">Database Failover (P1 Critical)</button>
+                            <button type="button" class="preset-btn" data-preset="stripe">Stripe Reconciliation (P2 High)</button>
+                            <button type="button" class="preset-btn" data-preset="cve">OpenSSL Hotpatch (P2 High)</button>
+                            <button type="button" class="preset-btn" data-preset="etl">Revenue Aggregation ETL (P3 Medium)</button>
+                            <button type="button" class="preset-btn" data-preset="search">Search Re-indexing (P4 Low)</button>
+                        </div>
+                    </div>
+
+                    <!-- Ingestion Form -->
+                    <form id="create-task-form" class="form-layout">
+                        <!-- Row 1: Title, Category, Due Date -->
+                        <div class="form-row">
+                            <div class="form-col" style="flex: 2;">
+                                <label class="form-label" for="task-title">Task Title <span style="color: #ef4444;">*</span></label>
+                                <input type="text" id="task-title" class="form-input" placeholder="e.g. Cluster Ingress Certificate Rotation" required minlength="2">
+                            </div>
+                            <div class="form-col">
+                                <label class="form-label" for="task-category">Category (Optional)</label>
+                                <select id="task-category" class="form-select">
+                                    <option value="Critical Infrastructure">Critical Infrastructure</option>
+                                    <option value="Payment Gateway">Payment Gateway</option>
+                                    <option value="Security Patch">Security Patch</option>
+                                    <option value="Data Pipeline">Data Pipeline</option>
+                                    <option value="Search Cluster">Search Cluster</option>
+                                    <option value="Background Job">Background Job</option>
+                                    <option value="Storage & Archival">Storage & Archival</option>
+                                    <option value="General" selected>General</option>
+                                </select>
+                            </div>
+                            <div class="form-col">
+                                <label class="form-label" for="task-due-date">Due Date (Optional)</label>
+                                <input type="date" id="task-due-date" class="form-input">
+                            </div>
+                        </div>
+
+                        <!-- Row 2: Description -->
+                        <div class="form-col">
+                            <label class="form-label" for="task-description">Description (Optional)</label>
+                            <textarea id="task-description" class="form-textarea" rows="2" placeholder="Provide detailed technical instructions, execution parameters, or context..."></textarea>
+                        </div>
+
+                        <!-- Row 3: Priority Selector Radio Cards (1 = Critical, 2 = High, 3 = Medium, 4 = Low) -->
+                        <div class="form-col">
+                            <label class="form-label">Priority Tier <span style="color: #ef4444;">*</span> &bull; Min-Heap Key (Lower number = Higher SLA Urgency)</label>
+                            <div class="priority-selector-grid" style="grid-template-columns: repeat(4, 1fr);">
+                                <label class="priority-radio-card">
+                                    <input type="radio" name="task-priority" value="1" required>
+                                    <span class="p-level-title" style="color: var(--p1-red);">1 &bull; Critical</span>
+                                    <span class="p-level-desc">Highest priority &bull; Immediate SLA execution</span>
+                                </label>
+                                <label class="priority-radio-card">
+                                    <input type="radio" name="task-priority" value="2">
+                                    <span class="p-level-title" style="color: var(--p2-orange);">2 &bull; High</span>
+                                    <span class="p-level-desc">High urgency &bull; Security & SLA risk</span>
+                                </label>
+                                <label class="priority-radio-card">
+                                    <input type="radio" name="task-priority" value="3" checked>
+                                    <span class="p-level-title" style="color: var(--p3-amber);">3 &bull; Medium</span>
+                                    <span class="p-level-desc">Standard scheduled operational jobs</span>
+                                </label>
+                                <label class="priority-radio-card">
+                                    <input type="radio" name="task-priority" value="4">
+                                    <span class="p-level-title" style="color: var(--p4-blue);">4 &bull; Low</span>
+                                    <span class="p-level-desc">Lowest priority &bull; Deferrable background tasks</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 12px; margin-top: 8px;">
+                            <button type="submit" class="btn btn-primary" id="btn-submit-task">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                Insert into Min-Heap (O(log n))
+                            </button>
+                            <button type="reset" class="btn btn-secondary">Clear Form</button>
+                        </div>
+                    </form>
+
+                    <!-- DYNAMIC INSERTION RESULT & OPERATION METRICS CARD -->
+                    <div id="insertion-result-card" class="card" style="display: none; margin-top: 24px; border-left: 4px solid var(--brand-indigo); background: #fdfdfe;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div style="width: 28px; height: 28px; border-radius: 50%; background: #ecfdf5; color: #047857; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                                    &#10003;
+                                </div>
+                                <h4 style="font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; color: var(--text-main);">
+                                    Task Successfully Saved to SQLite & Queued into Min-Heap
+                                </h4>
+                            </div>
+                            <span class="badge badge-completed">O(log n) Traversal</span>
+                        </div>
+
+                        <!-- Metrics Grid -->
+                        <div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); margin-bottom: 16px; gap: 10px;">
+                            <div class="kpi-card" style="padding: 12px;">
+                                <span class="kpi-title">Unique Task ID</span>
+                                <div class="kpi-value" style="font-size: 1.3rem; color: var(--text-main);" id="res-task-id">#--</div>
+                                <span class="kpi-subtext">Primary Key</span>
+                            </div>
+                            <div class="kpi-card" style="padding: 12px;">
+                                <span class="kpi-title">Persistent Sequence</span>
+                                <div class="kpi-value" style="font-size: 1.3rem; color: var(--brand-indigo);" id="res-task-seq">#--</div>
+                                <span class="kpi-subtext">Monotonic Order</span>
+                            </div>
+                            <div class="kpi-card" style="padding: 12px;">
+                                <span class="kpi-title">Initial &rarr; Final Index</span>
+                                <div class="kpi-value" style="font-size: 1.3rem; color: #0284c7;" id="res-task-indices">[--] &rarr; [--]</div>
+                                <span class="kpi-subtext">Array Buffer Location</span>
+                            </div>
+                            <div class="kpi-card" style="padding: 12px;">
+                                <span class="kpi-title">Comparisons</span>
+                                <div class="kpi-value" style="font-size: 1.3rem; color: #f59e0b;" id="res-task-comparisons">0</div>
+                                <span class="kpi-subtext">Parent Checks</span>
+                            </div>
+                            <div class="kpi-card" style="padding: 12px;">
+                                <span class="kpi-title">Swaps Executed</span>
+                                <div class="kpi-value" style="font-size: 1.3rem; color: var(--brand-indigo);" id="res-task-swaps">0</div>
+                                <span class="kpi-subtext">Sift-Up Permutations</span>
+                            </div>
+                        </div>
+
+                        <!-- Truthful Operation Explanation Box -->
+                        <div style="background: #f1f5f9; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 14px;">
+                            <div style="font-size: 0.75rem; font-weight: 700; color: var(--brand-indigo); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.04em;">
+                                &bull; Min-Heap Algorithm Operation Explanation (Generated from Actual Trace):
+                            </div>
+                            <div id="res-task-explanation" style="font-size: 0.88rem; color: var(--text-main); line-height: 1.5; font-weight: 500;">
+                                Task inserted into heap.
+                            </div>
+                        </div>
+
+                        <!-- Step-by-Step Swap Trace Timeline -->
+                        <div id="res-task-steps" class="swap-trace-box" style="margin-top: 0; max-height: 150px;">
+                            <!-- Populated dynamically -->
+                        </div>
+
+                        <div style="display: flex; gap: 10px; margin-top: 14px;">
+                            <button type="button" class="btn btn-secondary btn-sm" id="btn-res-view-tree">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"></circle><circle cx="6" cy="19" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="10" y1="7.5" x2="7.5" y2="16.5"></line><line x1="14" y1="7.5" x2="16.5" y2="16.5"></line></svg>
+                                View in Live Tree Topology
+                            </button>
+                            <button type="button" class="btn btn-outline btn-sm" id="btn-res-add-another">
+                                Add Another Task
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- =========================================================
+                 SECTION 3: LIVE PRIORITY QUEUE (SVG TREE & DUAL PANELS)
+                 ========================================================= -->
+            <section class="section-view" id="section-live-queue">
+
+                <!-- HEAP TOPOLOGY & REAL-TIME ANIMATION CARD -->
+                <div class="card">
+                    <div class="card-header" style="flex-wrap: wrap; gap: 12px;">
+                        <div class="card-title-group">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <h3>Binary Min-Heap Tree Topology</h3>
+                                <span class="badge badge-completed" id="heap-invariant-badge">Invariant: Valid</span>
+                            </div>
+                            <span class="card-caption">Complete Binary Tree Topology &bull; Parent(i) = &lfloor;(i-1)/2&rfloor; &bull; Left(i) = 2i+1 &bull; Right(i) = 2i+2</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                            <div style="display: flex; gap: 6px; font-size: 0.75rem;">
+                                <span class="badge badge-p1">P1 Critical</span>
+                                <span class="badge badge-p2">P2 High</span>
+                                <span class="badge badge-p3">P3 Medium</span>
+                                <span class="badge badge-p4">P4 Low</span>
+                            </div>
+                            <button class="btn btn-primary btn-sm" id="btn-live-quick-add" title="Enqueue new task and animate sift-up">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                Add Task
+                            </button>
+                            <button class="btn btn-dispatch btn-sm" id="btn-live-execute-next" title="Dispatch root task and animate sift-down">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                Execute Next Task
+                            </button>
+                            <button class="btn btn-secondary btn-sm" id="btn-fit-tree-view">Recenter Tree</button>
+                        </div>
+                    </div>
+
+                    <!-- ANIMATION CONTROLS TOOLBAR -->
+                    <div class="anim-control-bar">
+                        <div class="anim-control-group">
+                            <button class="btn btn-primary btn-sm" id="btn-anim-play" title="Play animation steps automatically">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                Play Animation
+                            </button>
+                            <button class="btn btn-secondary btn-sm" id="btn-anim-pause" title="Pause automatic animation">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+                                Pause
+                            </button>
+                            <button class="btn btn-outline btn-sm" id="btn-anim-step-mode" title="Toggle Step-by-Step manual mode">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                                Step-by-Step: <span id="anim-step-mode-status">OFF</span>
+                            </button>
+                            <button class="btn btn-secondary btn-sm" id="btn-anim-next" title="Advance to the next step">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>
+                                Next Step
+                            </button>
+                            <button class="btn btn-outline btn-sm" id="btn-anim-reset" title="Reset animation to current backend heap state">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+                                Reset Visualization
+                            </button>
+                            <button class="btn btn-dispatch btn-sm" id="btn-anim-sample-tasks" title="Populate realistic tasks into Priority Queue">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                Load Sample Tasks
+                            </button>
+                        </div>
+
+                        <div class="anim-status-group">
+                            <div class="speed-selector-wrap">
+                                <label for="select-anim-speed">Speed:</label>
+                                <select id="select-anim-speed" class="form-select form-select-sm" style="width: auto; padding: 4px 8px; font-size: 0.75rem;">
+                                    <option value="0.5">0.5x (Slow)</option>
+                                    <option value="1" selected>1.0x (Normal)</option>
+                                    <option value="2">2.0x (Fast)</option>
+                                </select>
+                            </div>
+                            <span class="anim-step-badge" id="anim-step-counter">Step: 0 / 0</span>
+                        </div>
+                    </div>
+
+                    <!-- STEP NARRATION BANNER (Describes comparisons, swaps, invariant state) -->
+                    <div id="anim-narration-banner" class="anim-narration-banner">
+                        <div class="narration-header">
+                            <span class="narration-tag" id="anim-narration-tag">REAL OPERATION TRACE</span>
+                            <span class="narration-status" id="anim-narration-status">Heap Invariant Satisfied &bull; Idle</span>
+                        </div>
+                        <div class="narration-body" id="anim-narration-text">
+                            Binary Min-Heap invariant holding. Root element (index 0) has highest SLA priority. Select "Play Animation" or perform an insertion/extraction to trace sift-up and sift-down traversals.
+                        </div>
+                    </div>
+
+                    <!-- SVG TREE VIEW -->
+                    <div class="svg-tree-container">
+                        <svg id="live-heap-svg" class="heap-svg" height="420"></svg>
+                        <div id="tree-empty-alert" class="empty-state-box" style="display: none;">
+                            Queue is empty. Enqueue a task to visualize the binary tree.
+                        </div>
+                    </div>
+
+                    <!-- TRACE STEP TIMELINE STRIP -->
+                    <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; margin-top: 14px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                            <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Backend Operation Trace Steps (Real Snapshots)</span>
+                            <span class="badge badge-queued">O(log n) Verification</span>
+                        </div>
+                        <div id="live-tree-trace-steps" style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.78rem; font-family: var(--font-mono); color: var(--text-secondary);">
+                            <span>Heap holding invariant. Root has highest SLA priority.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DUAL COMPARATIVE PANELS: INTERNAL HEAP-ARRAY BUFFER vs LOGICAL EXECUTION ORDER -->
+                <div class="dual-panels-grid">
+                    <!-- PANEL 1: ACTUAL CONTIGUOUS RAM ARRAY BUFFER -->
+                    <div class="card" style="margin-bottom: 0;">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <h3>Internal Heap-Array Buffer <code>heap[]</code></h3>
+                                    <span class="badge badge-queued">Contiguous RAM</span>
+                                </div>
+                                <span class="card-caption">Complete binary tree flattened in RAM: A[&lfloor;(i-1)/2&rfloor;] &le; A[i] &bull; <em>Partially ordered</em></span>
+                            </div>
+                        </div>
+                        <div style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 8px; line-height: 1.4;">
+                            Notice: In a binary min-heap, elements are <strong>not sorted linearly</strong> in RAM. Only the parent-child ordering rule is maintained.
+                        </div>
+                        <span id="hover-node-math-details" style="display: block; font-size: 0.78rem; font-family: var(--font-mono); color: var(--brand-indigo); margin-bottom: 10px;">
+                            Hover an array index to inspect parent/child relations
+                        </span>
+
+                        <div class="array-strip-wrapper">
+                            <div class="array-strip" id="live-array-strip">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PANEL 2: LOGICAL EXECUTION ORDER (SEPARATE NON-MUTATING VIEW) -->
+                    <div class="card" style="margin-bottom: 0;">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <h3>Logical Execution Order</h3>
+                                    <span class="badge badge-completed">Non-Mutating View &bull; Fully Ordered</span>
+                                </div>
+                                <span class="card-caption">Planned dispatch sequence: (Priority &uarr;, Persistent Sequence &uarr;)</span>
+                            </div>
+                            <span class="badge badge-processing" id="logical-order-count">0 Tasks Queued</span>
+                        </div>
+                        <div style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4;">
+                            Calculated using a <strong>separate non-mutating projection</strong> of eligible pending tasks without mutating the internal heap array.
+                        </div>
+
+                        <div class="logical-order-container" id="logical-order-list">
+                            <!-- Populated dynamically with ordered execution cards -->
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+
+            <!-- =========================================================
+                 SECTION 4: EXECUTION SIMULATOR
+                 ========================================================= -->
+            <section class="section-view" id="section-simulator">
+
+                <!-- SIMULATOR TOP ACTION TOOLBAR -->
+                <div class="simulator-toolbar">
+                    <div class="simulator-status-group">
+                        <span class="pulse-indicator active" id="sim-pulse-dot"></span>
+                        <div>
+                            <div style="font-weight: 700; font-size: 0.95rem;">Workload Execution Console & Dispatch Engine</div>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);" id="sim-engine-subtext">Interactive simulated cluster worker processing</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button class="btn btn-primary btn-sm" id="btn-sim-execute-next">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                            Execute Next Task
+                        </button>
+                        <button class="btn btn-dispatch btn-sm" id="btn-sim-mark-completed" disabled>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            Mark Current Task Completed
+                        </button>
+                        <button class="btn btn-outline btn-sm" id="btn-sim-cancel-task" style="color: #dc2626; border-color: #fca5a5;" disabled>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                            Cancel / Skip Task
+                        </button>
+                        <button class="btn btn-secondary btn-sm" id="btn-sim-seed-samples" title="Seed realistic tasks">
+                            Seed Samples
+                        </button>
+                        <button class="btn btn-outline btn-sm" id="btn-sim-reset" title="Reset queue">
+                            Reset Queue
+                        </button>
+                    </div>
+                </div>
+
+                <!-- FRIENDLY EMPTY STATE (Shown when no active task and no pending tasks exist) -->
+                <div id="sim-empty-state" class="card empty-state-card" style="display: none; margin-bottom: 20px;">
+                    <div class="empty-state-content">
+                        <div class="empty-state-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 14 14"></polyline>
+                            </svg>
+                        </div>
+                        <h3>Priority Queue is Currently Empty</h3>
+                        <p>No eligible pending tasks are waiting in the queue. All workloads have been dispatched or completed. Click below to generate sample tasks or create a new workload to continue the execution simulation.</p>
+                        <div class="empty-state-actions">
+                            <button class="btn btn-primary" id="btn-sim-empty-seed">
+                                Create Sample Tasks
+                            </button>
+                            <button class="btn btn-secondary" id="btn-sim-empty-create">
+                                Quick Add Task
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CURRENT SELECTED TASK (ACTIVE IN-PROGRESS WORKLOAD CONSOLE) -->
+                <div class="card" id="sim-active-task-card" style="border-left: 4px solid var(--brand-indigo);">
+                    <div class="card-header" style="flex-wrap: wrap; gap: 10px;">
+                        <div class="card-title-group">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <h3>Current Selected Task (Active Workload)</h3>
+                                <span class="badge badge-queued" id="sim-task-status-badge">Awaiting Dispatch</span>
+                            </div>
+                            <span class="card-caption">Selected via Binary Min-Heap Priority Queue &bull; Explicit user confirmation required to complete</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="badge badge-processing" id="sim-remaining-pending-badge">0 Pending in Queue</span>
+                        </div>
+                    </div>
+
+                    <!-- ACTIVE TASK DETAILS CONTAINER -->
+                    <div id="sim-task-content-box" style="padding: 4px 0;">
+                        <!-- Populated dynamically: title, ID, priority, description, timestamps, timers, latest operation -->
+                    </div>
+
+                    <!-- ACTIONS BAR INSIDE CARD -->
+                    <div class="sim-card-actions" id="sim-card-actions" style="margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; border-top: 1px solid var(--border-color); padding-top: 14px;">
+                        <button class="btn btn-dispatch" id="btn-card-mark-completed" disabled>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            Mark Current Task Completed
+                        </button>
+                        <button class="btn btn-outline" id="btn-card-cancel-task" style="color: #dc2626; border-color: #fca5a5;" disabled>
+                            Cancel / Skip Task
+                        </button>
+                        <button class="btn btn-secondary" id="btn-card-execute-next">
+                            Execute Next Task (Extract Root)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- LATEST OPERATION DETAILS & RECENT AUDIT TRAIL -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <h3>Latest Algorithm Operation Details & Execution Audit Trail</h3>
+                            <span class="card-caption">Real database transaction logs & algorithm time measurements</span>
+                        </div>
+                        <span class="badge badge-completed" id="sim-latest-op-tag">OPERATION AUDIT</span>
+                    </div>
+
+                    <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; margin-bottom: 14px;">
+                        <div style="font-size: 0.75rem; font-weight: 700; color: var(--brand-indigo); text-transform: uppercase; margin-bottom: 4px;">
+                            &bull; Most Recent Algorithm Operation Trace:
+                        </div>
+                        <div id="sim-latest-operation-text" style="font-size: 0.88rem; font-family: var(--font-sans); color: var(--text-main); font-weight: 500;">
+                            No extraction events yet. Click "Execute Next Task" to begin.
+                        </div>
+                    </div>
+
+                    <div class="simulator-logs-box" id="simulator-event-logs">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- WORKER NODES CONCURRENCY MATRIX -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <h3>Cluster Worker Nodes & Concurrency Matrix</h3>
+                            <span class="card-caption">Live status of parallel execution threads</span>
+                        </div>
+                    </div>
+                    <div class="worker-card-grid" id="simulator-workers-container">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+            </section>
+
+
+            <!-- =========================================================
+                 SECTION 5: TASK HISTORY
+                 ========================================================= -->
+            <section class="section-view" id="section-history">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <h3>Task Execution History & Audit Logs</h3>
+                            <span class="card-caption">Searchable audit trail of all queued, processing, completed, and canceled workloads</span>
+                        </div>
+                        <button class="btn btn-secondary btn-sm" id="btn-export-json">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            Export Tasks (JSON)
+                        </button>
+                    </div>
+
+                    <div class="table-filter-bar">
+                        <input type="text" id="table-search-input" class="form-input table-search-input" placeholder="Search tasks by title, notes, or category...">
+                        
+                        <div style="display: flex; gap: 8px;">
+                            <select id="table-status-filter" class="form-select" style="padding: 8px 12px; font-size: 0.8rem;">
+                                <option value="ALL">All Statuses</option>
+                                <option value="QUEUED">QUEUED</option>
+                                <option value="PROCESSING">PROCESSING</option>
+                                <option value="COMPLETED">COMPLETED</option>
+                                <option value="CANCELLED">CANCELLED</option>
+                            </select>
+
+                            <select id="table-category-filter" class="form-select" style="padding: 8px 12px; font-size: 0.8rem;">
+                                <option value="ALL">All Categories</option>
+                                <option value="Critical Infrastructure">Critical Infrastructure</option>
+                                <option value="Payment Gateway">Payment Gateway</option>
+                                <option value="Security Patch">Security Patch</option>
+                                <option value="Data Pipeline">Data Pipeline</option>
+                                <option value="Search Cluster">Search Cluster</option>
+                                <option value="Background Job">Background Job</option>
+                                <option value="Storage & Archival">Storage & Archival</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="data-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Task Title</th>
+                                    <th>Category</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Worker</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="task-table-body">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- =========================================================
+                 SECTION 6: PERFORMANCE ANALYTICS
+                 ========================================================= -->
+            <section class="section-view" id="section-analytics">
+                <div class="analytics-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <h3>Priority Tier Distribution</h3>
+                                <span class="card-caption">Queued workload breakdown across P1 - P5 tiers</span>
+                            </div>
+                        </div>
+                        <div class="chart-card-body">
+                            <canvas id="chart-priority-distribution"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <h3>Average Dispatch Wait Latency</h3>
+                                <span class="card-caption">Verification of SLA priority: P1 executed fastest</span>
+                            </div>
+                        </div>
+                        <div class="chart-card-body">
+                            <canvas id="chart-latency-breakdown"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <h3>Queue Health & Throughput Statistics</h3>
+                            <span class="card-caption">Aggregated pipeline telemetry</span>
+                        </div>
+                    </div>
+                    <div class="kpi-grid" style="margin-bottom: 0;">
+                        <div class="kpi-card">
+                            <span class="kpi-title">P1 Outage Mean Wait</span>
+                            <div class="kpi-value" style="color: var(--p1-red);" id="stat-p1-wait">0.8s</div>
+                            <span class="kpi-subtext">Immediate root preemption</span>
+                        </div>
+                        <div class="kpi-card">
+                            <span class="kpi-title">P5 Background Mean Wait</span>
+                            <div class="kpi-value" style="color: var(--p5-gray);" id="stat-p5-wait">45.0s</div>
+                            <span class="kpi-subtext">Deferred until cluster idle</span>
+                        </div>
+                        <div class="kpi-card">
+                            <span class="kpi-title">Algorithmic Efficiency</span>
+                            <div class="kpi-value" style="color: var(--brand-indigo);">100%</div>
+                            <span class="kpi-subtext">Zero O(n) array scans</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- =========================================================
+                 SECTION 7: ABOUT PROJECT (DSA DEEP DIVE)
+                 ========================================================= -->
+            <section class="section-view" id="section-about">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <h3>Data Structures & Algorithms (DSA) Architecture</h3>
+                            <span class="card-caption">Mathematical foundation and engineering design of PriorityFlow</span>
+                        </div>
+                    </div>
+
+                    <div class="dsa-section-grid">
+                        <div>
+                            <h4 style="font-weight: 700; margin-bottom: 8px;">Why a Binary Min-Heap?</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                                In production cloud scheduling and emergency operating systems, sorting an entire database table on every insertion is prohibitively expensive ($\mathcal{O}(n \log n)$). A <strong>Binary Min-Heap</strong> maintains a semi-ordered complete binary tree where every parent node has a priority value smaller than or equal to its children ($A[\text{parent}] \le A[\text{child}]$).
+                            </p>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-top: 8px;">
+                                This guarantees that the root (index 0) is <strong>always</strong> the highest-urgency task in $\mathcal{O}(1)$ time, while insertions and extractions only require walking the tree height ($\mathcal{O}(\log n)$).
+                            </p>
+                        </div>
+
+                        <div>
+                            <h4 style="font-weight: 700; margin-bottom: 8px;">Time Complexity Comparison</h4>
+                            <table class="complexity-table">
+                                <thead>
+                                    <tr>
+                                        <th>Operation</th>
+                                        <th>Min-Heap</th>
+                                        <th>Unsorted Array</th>
+                                        <th>Sorted Array</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Peek (Root)</td>
+                                        <td><span class="highlight-green">O(1)</span></td>
+                                        <td>O(n)</td>
+                                        <td>O(1)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Insert (Enqueue)</td>
+                                        <td><span class="highlight-green">O(log n)</span></td>
+                                        <td>O(1)</td>
+                                        <td>O(n)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Extract-Min (Dispatch)</td>
+                                        <td><span class="highlight-green">O(log n)</span></td>
+                                        <td>O(n)</td>
+                                        <td>O(1)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Update Priority (Sift)</td>
+                                        <td><span class="highlight-green">O(log n)</span></td>
+                                        <td>O(1) search + O(1)</td>
+                                        <td>O(n)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <h4 style="font-weight: 700; margin-bottom: 8px;">Zero-Pointer Array Flattening Formulas</h4>
+                        <div class="code-snippet-box">
+Parent Index:      floor((i - 1) / 2)
+Left Child Index:  2 * i + 1
+Right Child Index: 2 * i + 2
+
+Min-Heap Invariant: A[floor((i - 1) / 2)] &le; A[i] for all valid child indices i &gt; 0.
+Ordering Rule:      First: lower numeric priority (P1 Critical before P4 Low).
+                    Second: earlier persistent insertion sequence for equal priorities (FIFO stability).
+Key Insight:        A binary min-heap does NOT store every element in fully sorted order!
+                    It guarantees ONLY that its root (index 0) is the highest-priority eligible
+                    element under the chosen ordering rule.
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 24px;">
+                        <h4 style="font-weight: 700; margin-bottom: 8px;">Verification: Custom Min-Heap vs Python <code>heapq</code></h4>
+                        <div class="heapq-verify-panel">
+                            <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                                Click below to trigger a live side-by-side extraction between PriorityFlow's custom class and Python's standard <code>heapq</code> library.
+                            </p>
+                            <button class="btn btn-secondary btn-sm" id="btn-run-about-verify" style="align-self: flex-start;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Run Live Verification Test
+                            </button>
+                            <div id="about-heapq-output" class="heapq-output-box">
+                                Click button above to execute live algorithmic comparison.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- MODAL 1: QUICK ADD TASK (INSTANT FROM OVERVIEW) -->
+    <div class="modal-backdrop hidden" id="modal-quick-add-task">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title">Quick Add Task</h3>
+                <button class="btn-outline btn-sm" id="btn-close-quick-add-modal" style="border: none; font-size: 1.2rem; cursor: pointer;">&times;</button>
+            </div>
+            <form id="quick-add-task-form">
+                <div class="modal-body">
+                    <div class="form-col">
+                        <label class="form-label" for="quick-task-title">Task Title <span style="color: #ef4444;">*</span></label>
+                        <input type="text" id="quick-task-title" class="form-input" placeholder="e.g. Sync Redis Cache Invalidation" required minlength="2">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-col">
+                            <label class="form-label" for="quick-task-category">Category (Optional)</label>
+                            <select id="quick-task-category" class="form-select">
+                                <option value="Critical Infrastructure">Critical Infrastructure</option>
+                                <option value="Payment Gateway">Payment Gateway</option>
+                                <option value="Security Patch">Security Patch</option>
+                                <option value="Data Pipeline">Data Pipeline</option>
+                                <option value="Search Cluster">Search Cluster</option>
+                                <option value="Background Job">Background Job</option>
+                                <option value="Storage & Archival">Storage & Archival</option>
+                                <option value="General" selected>General</option>
+                            </select>
+                        </div>
+                        <div class="form-col">
+                            <label class="form-label" for="quick-task-priority">Priority Tier <span style="color: #ef4444;">*</span></label>
+                            <select id="quick-task-priority" class="form-select" required>
+                                <option value="1">1 = Critical (Highest Priority)</option>
+                                <option value="2">2 = High Priority</option>
+                                <option value="3" selected>3 = Medium Priority</option>
+                                <option value="4">4 = Low (Lowest Priority)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-col">
+                            <label class="form-label" for="quick-task-due-date">Due Date (Optional)</label>
+                            <input type="date" id="quick-task-due-date" class="form-input">
+                        </div>
+                    </div>
+
+                    <div class="form-col">
+                        <label class="form-label" for="quick-task-description">Description (Optional)</label>
+                        <textarea id="quick-task-description" class="form-textarea" rows="2" placeholder="Optional technical instructions, execution parameters, or context..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" id="btn-cancel-quick-add">Cancel</button>
+                    <button type="submit" class="btn btn-primary btn-sm">Insert into Min-Heap (O(log n))</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: UPDATE TASK PRIORITY (DECREASE / INCREASE KEY) -->
+    <div class="modal-backdrop hidden" id="modal-update-priority">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title">Re-Prioritize Task (Min-Heap Sift)</h3>
+                <button class="btn-outline btn-sm" id="btn-close-priority-modal" style="border: none; font-size: 1.2rem; cursor: pointer;">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modal-task-title-text" style="font-size: 0.88rem; font-weight: 600; color: var(--text-main);">Updating Task</p>
+                <input type="hidden" id="modal-task-id">
+
+                <div class="form-col">
+                    <label class="form-label" for="modal-new-priority-select">Select New Priority Level:</label>
+                    <select id="modal-new-priority-select" class="form-select">
+                        <option value="1">1 = Critical (Highest Priority &bull; Immediate)</option>
+                        <option value="2">2 = High Priority (Urgent operational)</option>
+                        <option value="3">3 = Medium Priority (Standard scheduled)</option>
+                        <option value="4">4 = Low Priority (Lowest Priority &bull; Deferrable)</option>
+                    </select>
+                </div>
+
+                <div style="background: #f1f5f9; padding: 10px; border-radius: var(--radius-sm); font-size: 0.78rem; color: var(--text-secondary);">
+                    <strong>DSA Sift Mechanics:</strong> Escalating priority triggers <code>_sift_up()</code>. Lowering priority triggers <code>_sift_down()</code>. Completed in $\mathcal{O}(\log n)$ time.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" id="btn-cancel-priority-modal">Cancel</button>
+                <button type="submit" class="btn btn-primary btn-sm" id="btn-confirm-priority-update">Execute Sift Re-order</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/js/heap_visualizer.js"></script>
+    <script src="/static/js/charts.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
